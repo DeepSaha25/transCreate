@@ -1,47 +1,46 @@
 /* ================================================
    TransCreate — Design Tokens
    Theme: Professional Editorial Dark
-   Palette: Near-black + Cinema Red + Warm Amber
-   NO violet, indigo, blue, glassmorphism, emojis
+   Palette: Near-black + Warm Gold + Cream
    ================================================ */
 
 :root {
   /* ── Backgrounds ─────────────────────────────── */
-  --bg-primary:       #0a0a0b;
-  --bg-surface:       #111115;
-  --bg-card:          #16161a;
-  --bg-card-hover:    #1c1c22;
-  --bg-elevated:      #222228;
-  --bg-input:         #0e0e12;
+  --bg-primary:       #09090b;
+  --bg-surface:       #101014;
+  --bg-card:          #15151a;
+  --bg-card-hover:    #1b1b22;
+  --bg-elevated:      #212128;
+  --bg-input:         #0d0d11;
 
   /* ── Borders ──────────────────────────────────── */
-  --border:           #222226;
-  --border-subtle:    #19191d;
-  --border-strong:    #2e2e34;
-  --border-accent:    #3a1a10;
+  --border:           #222228;
+  --border-subtle:    #18181e;
+  --border-strong:    #2d2d36;
+  --border-accent:    #3a3010;
 
   /* ── Text ─────────────────────────────────────── */
-  --text-primary:     #f0eeea;
-  --text-secondary:   #b8b5b0;
-  --text-muted:       #888884;
-  --text-faint:       #504e4a;
+  --text-primary:     #f5f2ea;
+  --text-secondary:   #bab7ae;
+  --text-muted:       #87847a;
+  --text-faint:       #4e4c48;
 
-  /* ── Cinema Red (Primary Accent) ───────────────── */
-  --accent:           #c2410c;
-  --accent-light:     #ea580c;
-  --accent-dim:       rgba(194, 65, 12, 0.1);
-  --accent-glow:      rgba(194, 65, 12, 0.2);
-  --accent-border:    rgba(194, 65, 12, 0.3);
+  /* ── Warm Gold (Primary Accent) ─────────────── */
+  --accent:           #d4a017;
+  --accent-light:     #e8c84a;
+  --accent-dim:       rgba(212, 160, 23, 0.10);
+  --accent-glow:      rgba(212, 160, 23, 0.22);
+  --accent-border:    rgba(212, 160, 23, 0.30);
 
-  /* ── Warm Amber (Secondary / Success) ─────────── */
-  --amber:            #d97706;
-  --amber-light:      #f59e0b;
-  --amber-dim:        rgba(217, 119, 6, 0.1);
+  /* ── Cream / Pale Gold (Secondary) ──────────── */
+  --amber:            #c8960c;
+  --amber-light:      #f0d060;
+  --amber-dim:        rgba(200, 150, 12, 0.10);
 
   /* ── Semantic ─────────────────────────────────── */
   --success:          #16a34a;
   --success-dim:      rgba(22, 163, 74, 0.1);
-  --warning:          #d97706;
+  --warning:          #d4a017;
   --danger:           #991b1b;
 
   /* ── Typography ───────────────────────────────── */

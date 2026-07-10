@@ -110,11 +110,14 @@ pre { padding: var(--sp-4); overflow-x: auto; }
 .btn-primary:hover { background: var(--accent-light); border-color: var(--accent-light); }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.15);
 }
-.btn-ghost:hover { background: var(--bg-card); color: var(--text-primary); }
+.btn-ghost:hover { 
+  background: rgba(255, 255, 255, 0.08); 
+  border-color: rgba(255, 255, 255, 0.25);
+}
 
 .btn-outline {
   background: transparent;
