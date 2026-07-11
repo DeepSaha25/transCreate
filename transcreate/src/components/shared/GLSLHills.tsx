@@ -117,14 +117,14 @@ const GLSLHills = ({
               varying vec3 vPosition;
 
               void main(void) {
-                // Height-based cinema red/amber gradient
+                // Height-based warm gold gradient
                 // vPosition.y ranges roughly -5 to +55 from the vertex noise
                 float h = clamp((vPosition.y + 5.0) / 55.0, 0.0, 1.0);
 
-                // Palette: deep red base -> cinema red -> warm amber peak
-                vec3 colLow  = vec3(0.22, 0.04, 0.01);  // deep dark red
-                vec3 colMid  = vec3(0.72, 0.20, 0.03);  // cinema red-orange
-                vec3 colHigh = vec3(0.95, 0.50, 0.08);  // warm amber peak
+                // Palette: dark bronze base -> warm gold -> bright cream peak
+                vec3 colLow  = vec3(0.18, 0.13, 0.02);  // dark bronze
+                vec3 colMid  = vec3(0.65, 0.48, 0.06);  // warm gold
+                vec3 colHigh = vec3(0.94, 0.84, 0.45);  // bright cream-yellow peak
 
                 vec3 color = h < 0.5
                   ? mix(colLow,  colMid,  h * 2.0)
