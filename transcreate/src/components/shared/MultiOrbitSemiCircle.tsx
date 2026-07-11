@@ -8,74 +8,71 @@ import {
 import "./MultiOrbitSemiCircle.css";
 
 const ICONS = [
-  { url: "https://cdn.simpleicons.org/ibm/white", label: "IBM Granite" },
-  { url: "https://cdn.simpleicons.org/langchain/white", label: "LangChain" },
+  { url: "https://cdn.simpleicons.org/ibm/ffffff", label: "IBM Granite" },
+  { url: "https://cdn.simpleicons.org/langchain/ffffff", label: "LangChain" },
   { url: "https://cdn.simpleicons.org/huggingface", label: "Hugging Face" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg", label: "React" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg", label: "TypeScript" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg", label: "Vite" },
-  { url: "https://cdn.simpleicons.org/chartdotjs/white", label: "Chart.js" },
+  { url: "https://cdn.simpleicons.org/chartdotjs/ffffff", label: "Chart.js" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/framermotion/framermotion-original.svg", label: "Framer Motion" },
-  { url: "https://cdn.simpleicons.org/zod/white", label: "Zod" },
-  { url: "https://cdn.simpleicons.org/reactrouter/white", label: "React Router" },
+  { url: "https://cdn.simpleicons.org/zod/ffffff", label: "Zod" },
+  { url: "https://cdn.simpleicons.org/reactrouter/ffffff", label: "React Router" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg", label: "Node.js" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg", label: "Vanilla CSS" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg", label: "GitHub" },
   { url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg", label: "HTML5" }
 ];
 
-function SemiCircleOrbit({ radius, centerX, centerY, count, iconSize, startIndex }: any) {
+function SemiCircleOrbit({ radius, centerX, centerY, count, iconSize, startIndex, speed, direction }: any) {
   return (
-    <>
-      {/* Semi-circle glow background */}
-      <div className="orbit-glow-wrapper">
-        <div className="orbit-glow" />
-      </div>
-
-      {/* Orbit icons */}
+    <div 
+      className={`orbit-ring ${direction === 'reverse' ? 'orbit-ring--reverse' : ''}`}
+      style={{
+        width: radius * 2,
+        height: radius * 2,
+        left: centerX - radius,
+        top: centerY - radius,
+        animationDuration: `${speed}s`,
+      }}
+    >
       {Array.from({ length: count }).map((_, index) => {
-        const angle = (index / (count - 1)) * 180;
-        const x = radius * Math.cos((angle * Math.PI) / 180);
-        const y = radius * Math.sin((angle * Math.PI) / 180);
+        // Full 360 degree circle distribution
+        const angle = (index / count) * 360;
+        
+        // Calculate position relative to the orbit-ring's top-left
+        const x = radius + radius * Math.cos((angle * Math.PI) / 180);
+        const y = radius + radius * Math.sin((angle * Math.PI) / 180);
         
         const itemIndex = (startIndex + index) % ICONS.length;
         const tech = ICONS[itemIndex];
 
-        // Tooltip positioning — above or below based on angle
-        const tooltipAbove = angle > 90;
-
         return (
           <div
             key={index}
-            className="orbit-icon-container"
+            className={`orbit-icon-container ${direction === 'reverse' ? 'orbit-icon-container--reverse' : ''}`}
             style={{
-              left: `${centerX + x - iconSize / 2}px`,
-              top: `${centerY - y - iconSize / 2}px`,
-              zIndex: 5,
+              left: `${x - iconSize / 2}px`,
+              top: `${y - iconSize / 2}px`,
+              animationDuration: `${speed}s`,
             }}
           >
-            <div 
-              className="orbit-icon"
-              style={{ width: iconSize, height: iconSize }}
-            >
-              <img 
-                src={tech.url} 
-                alt={tech.label} 
-                style={{ width: iconSize * 0.55, height: iconSize * 0.55, objectFit: 'contain' }}
-              />
-            </div>
-
-            {/* Tooltip */}
-            <div
-              className={`orbit-tooltip ${tooltipAbove ? "orbit-tooltip--above" : "orbit-tooltip--below"}`}
-            >
-              {tech.label}
-              <div className="orbit-tooltip-arrow"></div>
+            <div className="orbit-icon-scaler" style={{ transform: `scaleY(${1 / 0.35})` }}>
+              <div 
+                className="orbit-icon"
+                style={{ width: iconSize, height: iconSize }}
+              >
+                <img 
+                  src={tech.url} 
+                  alt={tech.label} 
+                  style={{ width: iconSize * 0.55, height: iconSize * 0.55, objectFit: 'contain' }}
+                />
+              </div>
             </div>
           </div>
         );
       })}
-    </>
+    </div>
   );
 }
 
@@ -88,16 +85,20 @@ export default function MultiOrbitSemiCircle() {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  const baseWidth = Math.min(size.width * 0.9, 800);
-  const centerX = baseWidth / 2;
-  const centerY = baseWidth * 0.55; // slightly lower center to fit semi-circle
-
+  const baseWidth = Math.min(size.width * 0.9, 900);
+  const maxRadius = baseWidth * 0.4; // Maximum radius for the outer orbit
+  const scaleY = 0.35; // How flat the oval is
+  
   const iconSize =
     size.width < 480
       ? Math.max(32, baseWidth * 0.08)
       : size.width < 768
       ? Math.max(40, baseWidth * 0.07)
-      : Math.max(48, baseWidth * 0.06);
+      : Math.max(48, baseWidth * 0.05);
+
+  const wrapperHeight = (maxRadius * scaleY) + iconSize * 1.5; // Top half + padding
+  const centerX = baseWidth / 2;
+  const centerY = maxRadius; // Center vertically in the unscaled diagram
 
   return (
     <section className="orbit-section" id="built-with">
@@ -109,15 +110,33 @@ export default function MultiOrbitSemiCircle() {
         </p>
 
         <div
-          className="orbit-diagram"
-          style={{ width: baseWidth, height: baseWidth * 0.6 }}
+          className="orbit-diagram-wrapper"
+          style={{ 
+            width: baseWidth, 
+            height: wrapperHeight, 
+            overflow: 'hidden', 
+            position: 'relative',
+            margin: '0 auto' 
+          }}
         >
-          {/* Inner orbit - 5 items */}
-          <SemiCircleOrbit radius={baseWidth * 0.25} centerX={centerX} centerY={centerY} count={5} iconSize={iconSize} startIndex={0} />
-          {/* Middle orbit - 7 items */}
-          <SemiCircleOrbit radius={baseWidth * 0.40} centerX={centerX} centerY={centerY} count={7} iconSize={iconSize} startIndex={5} />
-          {/* Outer orbit - 9 items */}
-          <SemiCircleOrbit radius={baseWidth * 0.55} centerX={centerX} centerY={centerY} count={9} iconSize={iconSize} startIndex={12} />
+          <div
+            className="orbit-diagram"
+            style={{ 
+              width: baseWidth, 
+              height: maxRadius * 2,
+              position: 'absolute',
+              bottom: -maxRadius + iconSize,
+              transform: `scaleY(${scaleY})`,
+              transformOrigin: 'center center'
+            }}
+          >
+            {/* Inner orbit */}
+            <SemiCircleOrbit radius={maxRadius * 0.35} centerX={centerX} centerY={centerY} count={4} iconSize={iconSize} startIndex={0} speed={25} />
+            {/* Middle orbit */}
+            <SemiCircleOrbit radius={maxRadius * 0.65} centerX={centerX} centerY={centerY} count={7} iconSize={iconSize} startIndex={4} speed={35} direction="reverse" />
+            {/* Outer orbit */}
+            <SemiCircleOrbit radius={maxRadius} centerX={centerX} centerY={centerY} count={10} iconSize={iconSize} startIndex={11} speed={45} />
+          </div>
         </div>
       </div>
     </section>

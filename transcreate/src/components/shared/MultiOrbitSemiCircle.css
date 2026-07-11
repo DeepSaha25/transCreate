@@ -1,5 +1,5 @@
 .orbit-section {
-  padding: var(--sp-20) 0 var(--sp-24);
+  padding: var(--sp-10) 0 var(--sp-12);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -21,7 +21,7 @@
 
 .orbit-section__sub {
   margin-top: var(--sp-4);
-  margin-bottom: var(--sp-16);
+  margin-bottom: var(--sp-6);
   max-width: 640px;
   color: var(--text-muted);
   line-height: 1.7;
@@ -35,10 +35,7 @@
 
 /* Background glow */
 .orbit-glow-wrapper {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
+  display: none;
 }
 
 .orbit-glow {
@@ -52,12 +49,37 @@
   z-index: 0;
 }
 
-/* Icon Container */
+/* Icon Container & Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  animation: spin linear infinite;
+}
+
+.orbit-ring--reverse {
+  animation: spin-reverse linear infinite;
+}
+
 .orbit-icon-container {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: spin-reverse linear infinite;
+}
+
+.orbit-icon-container--reverse {
+  animation: spin linear infinite;
 }
 
 /* Actual Icon */
