@@ -1,0 +1,244 @@
+.hiw-section {
+  padding: var(--sp-12) 0;
+  background-color: var(--bg-body);
+  overflow: hidden;
+}
+
+.hiw-header {
+  text-align: center;
+  margin-bottom: var(--sp-16);
+}
+
+.hiw-headline {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin: var(--sp-3) auto 0;
+  max-width: 800px;
+}
+
+.hiw-cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-4);
+  max-width: 900px;
+  margin: 0 auto;
+  perspective: 1000px;
+  padding-bottom: var(--sp-8);
+}
+
+.hiw-card {
+  width: 280px;
+  height: 380px;
+  background-color: #1a1a1c;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hiw-card:hover {
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+  /* The rotation is preserved via JS inline style, but we can't easily merge them in plain CSS.
+     The fanning effect is static in this design, so we leave it alone on hover, or lift it slightly. */
+  transform: translateY(-5px) !important;
+  z-index: 10 !important;
+}
+
+.hiw-card__top {
+  padding: var(--sp-6) var(--sp-5);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.hiw-card__num-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: var(--sp-6);
+  position: relative;
+}
+
+.hiw-card__num {
+  font-size: 28px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.hiw-card__star {
+  color: var(--accent);
+  position: absolute;
+  top: -6px;
+  right: -16px;
+}
+
+.hiw-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--sp-3);
+}
+
+.hiw-card__body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hiw-card__visual {
+  height: 120px;
+  background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.03) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+}
+
+.hiw-mockup {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Mockup contents */
+.mockup-window {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  width: 80%;
+}
+
+.mockup-window__icon {
+  color: var(--text-muted);
+  display: flex;
+}
+
+.mockup-window__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.mockup-window__title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.mockup-window__sub {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.mockup-route {
+  display: flex;
+  align-items: stretch;
+  width: 85%;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mockup-route__node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--sp-3) 0;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.mockup-route__node--active {
+  background: rgba(212, 160, 23, 0.05);
+}
+
+.mockup-route__label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+  margin-bottom: 2px;
+}
+
+.mockup-route__value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mockup-route__node--active .mockup-route__value {
+  color: var(--accent);
+}
+
+.mockup-route__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-2);
+  position: relative;
+}
+
+.mockup-route__line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mockup-route__arrow {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  background: #141416;
+  position: relative;
+  z-index: 1;
+  padding: 2px;
+}
+
+.mockup-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #000;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 4px 15px rgba(212, 160, 23, 0.3);
+}
+
+@media (max-width: 900px) {
+  .hiw-cards-container {
+    flex-direction: column;
+    gap: var(--sp-8);
+  }
+  
+  .hiw-card {
+    transform: none !important;
+  }
+}
