@@ -1,0 +1,95 @@
+/* ================================================
+   TransCreate — Design Tokens
+   Theme: Professional Editorial Dark
+   Palette: Near-black + Cinema Red + Warm Amber
+   NO violet, indigo, blue, glassmorphism, emojis
+   ================================================ */
+
+:root {
+  /* ── Backgrounds ─────────────────────────────── */
+  --bg-primary:       #0a0a0b;
+  --bg-surface:       #111115;
+  --bg-card:          #16161a;
+  --bg-card-hover:    #1c1c22;
+  --bg-elevated:      #222228;
+  --bg-input:         #0e0e12;
+
+  /* ── Borders ──────────────────────────────────── */
+  --border:           #222226;
+  --border-subtle:    #19191d;
+  --border-strong:    #2e2e34;
+  --border-accent:    #3a1a10;
+
+  /* ── Text ─────────────────────────────────────── */
+  --text-primary:     #f0eeea;
+  --text-secondary:   #b8b5b0;
+  --text-muted:       #888884;
+  --text-faint:       #504e4a;
+
+  /* ── Cinema Red (Primary Accent) ───────────────── */
+  --accent:           #c2410c;
+  --accent-light:     #ea580c;
+  --accent-dim:       rgba(194, 65, 12, 0.1);
+  --accent-glow:      rgba(194, 65, 12, 0.2);
+  --accent-border:    rgba(194, 65, 12, 0.3);
+
+  /* ── Warm Amber (Secondary / Success) ─────────── */
+  --amber:            #d97706;
+  --amber-light:      #f59e0b;
+  --amber-dim:        rgba(217, 119, 6, 0.1);
+
+  /* ── Semantic ─────────────────────────────────── */
+  --success:          #16a34a;
+  --success-dim:      rgba(22, 163, 74, 0.1);
+  --warning:          #d97706;
+  --danger:           #991b1b;
+
+  /* ── Typography ───────────────────────────────── */
+  --font-display:     'Sora', system-ui, sans-serif;
+  --font-body:        'Inter', system-ui, sans-serif;
+  --font-mono:        'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Type Scale ───────────────────────────────── */
+  --text-xs:    0.6875rem;   /* 11px */
+  --text-sm:    0.8125rem;   /* 13px */
+  --text-base:  0.9375rem;   /* 15px */
+  --text-lg:    1.0625rem;   /* 17px */
+  --text-xl:    1.25rem;     /* 20px */
+  --text-2xl:   1.5rem;      /* 24px */
+  --text-3xl:   1.875rem;    /* 30px */
+  --text-4xl:   2.25rem;     /* 36px */
+  --text-5xl:   3rem;        /* 48px */
+  --text-6xl:   3.75rem;     /* 60px */
+
+  /* ── Spacing ──────────────────────────────────── */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --sp-24: 6rem;
+  --sp-32: 8rem;
+
+  /* ── Radius ───────────────────────────────────── */
+  --r-sm:   3px;
+  --r-md:   6px;
+  --r-lg:   10px;
+  --r-xl:   16px;
+  --r-full: 9999px;
+
+  /* ── Shadows ──────────────────────────────────── */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.6);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:  0 12px 36px rgba(0,0,0,0.6);
+
+  /* ── Transitions ──────────────────────────────── */
+  --t-fast: 100ms ease;
+  --t-base: 180ms ease;
+  --t-slow: 300ms ease;
+}

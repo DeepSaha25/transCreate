@@ -1,0 +1,117 @@
+.rationale-drawer {
+  width: 320px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.rationale-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.rationale-drawer__title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.rationale-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  transition: color var(--t-fast);
+  padding: var(--sp-1);
+  border-radius: var(--r-sm);
+}
+
+.rationale-drawer__close:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.rationale-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.rationale-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.rationale-section__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.rationale-section__text {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.rationale-section__text--original {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-style: italic;
+  border: 1px solid var(--border);
+}
+
+.rationale-section__text--new {
+  background: var(--accent-dim);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-border);
+}
+
+.rationale-tags {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.rationale-section__body {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.rationale-pronunciation {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--amber-light);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  white-space: pre-wrap;
+}
+
+.rationale-timing {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  display: block;
+}

@@ -1,0 +1,185 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 10, 11, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--sp-5);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* ── Brand ── */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar__logo-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  border-radius: var(--r-md);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.navbar__brand-name {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.navbar__brand-dot {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════
+   Dock Bar — 70% center, no overlap
+   ═══════════════════════════════════════ */
+.dock-bar {
+  flex: 1;
+  max-width: 520px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(22, 22, 26, 0.55);
+  backdrop-filter: blur(16px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 0 auto;
+}
+
+/* ── Individual Tab ── */
+.dock-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  cursor: pointer;
+  border-radius: 8px;
+  position: relative;
+  justify-content: center;
+  white-space: nowrap;
+  /* Prevent any overflow / overlap */
+  overflow: visible;
+  isolation: isolate;
+}
+
+.dock-tab:hover:not(.dock-tab--disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+}
+
+.dock-tab--active {
+  color: var(--text-primary) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+.dock-tab--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Icon circle */
+.dock-tab__icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  color: inherit;
+  flex-shrink: 0;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dock-tab--active .dock-tab__icon {
+  color: #fff;
+}
+
+/* Label */
+.dock-tab__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.dock-tab--active .dock-tab__label {
+  font-weight: 600;
+}
+
+/* Active underline indicator */
+.dock-tab__indicator {
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════
+   Right Nav
+   ═══════════════════════════════════════ */
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.navbar__link {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+
+.navbar__link:hover {
+  color: var(--text-primary);
+}
+
+/* ── Engine Badge ── */
+.navbar__engine-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  color: var(--accent-light);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

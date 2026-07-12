@@ -1,0 +1,127 @@
+.about {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.about__content {
+  padding: var(--sp-16) var(--sp-6);
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.about__title {
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-12);
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-8) 0;
+}
+
+.about-section h2 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.about-section p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.about-section strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.about-section em {
+  color: var(--accent-light);
+  font-style: italic;
+}
+
+/* Architecture blocks */
+.about-arch {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.arch-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.arch-block:last-child { border-bottom: none; }
+
+.arch-block__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.arch-block p {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Tech grid */
+.about-tech-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.about-tech-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.about-tech-row:last-child { border-bottom: none; }
+
+.about-tech-row__name {
+  font-size: var(--text-xs);
+  color: var(--amber-light);
+  background: var(--bg-elevated);
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.about-tech-row__desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  .about-tech-row {
+    grid-template-columns: 1fr;
+  }
+}

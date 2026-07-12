@@ -1,0 +1,142 @@
+.line-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5);
+  cursor: pointer;
+  transition: background var(--t-fast);
+  border-left: 2px solid transparent;
+  position: relative;
+}
+
+.line-card:hover {
+  background: var(--bg-card);
+}
+
+.line-card--selected {
+  background: var(--bg-card);
+  border-left-color: var(--accent);
+}
+
+.line-card--empty {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.line-card--loading {
+  cursor: default;
+}
+
+.line-card__index {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  padding-top: 2px;
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.line-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.line-card__time {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.line-card__text {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  line-height: 1.55;
+}
+
+.line-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: 2px;
+}
+
+.line-card__emotion {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.line-card__empty-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.line-card__empty-text {
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* Shimmers */
+.line-card__shimmer {
+  height: 12px;
+  border-radius: 3px;
+  background: var(--bg-elevated);
+  width: 80%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.line-card__shimmer--short { width: 50%; margin-top: 6px; }
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+.line-card__loader {
+  flex-shrink: 0;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+
+/* Actions */
+.line-card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+
+.line-card:hover .line-card__actions {
+  opacity: 1;
+}
+
+.line-card__speak-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  transition: all var(--t-fast);
+}
+
+.line-card__speak-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+}
+
+/* Spin (also used in Studio.css) */
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

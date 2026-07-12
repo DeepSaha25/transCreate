@@ -1,0 +1,135 @@
+.orbit-section {
+  padding: var(--sp-20) 0 var(--sp-24);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.orbit-section__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.orbit-section__headline {
+  margin-top: var(--sp-4);
+  max-width: 600px;
+}
+
+.orbit-section__sub {
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-16);
+  max-width: 640px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Orbit Diagram */
+.orbit-diagram {
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Background glow */
+.orbit-glow-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.orbit-glow {
+  width: 1000px;
+  height: 1000px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(194, 65, 12, 0.15), transparent 60%);
+  filter: blur(64px);
+  margin-top: -10rem;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Icon Container */
+.orbit-icon-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Actual Icon */
+.orbit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.orbit-icon-container:hover .orbit-icon {
+  transform: scale(1.15);
+  border-color: var(--border-strong);
+  color: var(--text-primary) !important;
+  box-shadow: 0 4px 16px rgba(194, 65, 12, 0.3);
+}
+
+/* Tooltip */
+.orbit-tooltip {
+  position: absolute;
+  display: none;
+  width: 120px;
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+}
+
+.orbit-icon-container:hover .orbit-tooltip {
+  display: block;
+}
+
+/* Positioning Tooltip based on angle */
+.orbit-tooltip--above {
+  bottom: calc(100% + 12px);
+}
+
+.orbit-tooltip--below {
+  top: calc(100% + 12px);
+}
+
+/* Tooltip Arrow */
+.orbit-tooltip-arrow {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  z-index: -1;
+}
+
+.orbit-tooltip--above .orbit-tooltip-arrow {
+  top: calc(100% - 6px);
+  border-top: none;
+  border-left: none;
+}
+
+.orbit-tooltip--below .orbit-tooltip-arrow {
+  bottom: calc(100% - 6px);
+  border-bottom: none;
+  border-right: none;
+}
