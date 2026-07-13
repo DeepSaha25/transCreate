@@ -1,4 +1,4 @@
-import React from 'react';
+
 import './HowItWorksCards.css';
 
 const steps = [

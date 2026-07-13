@@ -109,7 +109,7 @@ export async function transcreateLines(
       } catch (err) {
         console.error('Hugging Face API Error:', err)
         // Fallback to mock if no API key or parsing fails
-        parsed = getMockTranscreation(line.text, sourceCulture, targetCulture)
+        parsed = getMockTranscreation(line.text, sourceCulture, targetCulture) as any
       }
 
       onLineComplete({

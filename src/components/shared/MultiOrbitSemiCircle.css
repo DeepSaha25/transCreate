@@ -1,5 +1,5 @@
 .orbit-section {
-  padding: var(--sp-10) 0 var(--sp-12);
+  padding: var(--sp-10) 0 0;
   position: relative;
   overflow: hidden;
   width: 100%;

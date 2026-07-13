@@ -1,0 +1,50 @@
+.btn-open-studio {
+  position: relative;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: 9999px;
+  height: 48px;
+  padding: 4px;
+  padding-left: 24px;
+  padding-right: 56px;
+  width: max-content;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  transition: all 0.5s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-open-studio:hover {
+  padding-left: 56px;
+  padding-right: 24px;
+}
+
+.btn-open-studio span {
+  position: relative;
+  z-index: 10;
+  transition: all 0.5s ease;
+}
+
+.btn-open-studio .icon-circle {
+  position: absolute;
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-primary);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+.btn-open-studio:hover .icon-circle {
+  right: calc(100% - 44px);
+  transform: rotate(45deg);
+}

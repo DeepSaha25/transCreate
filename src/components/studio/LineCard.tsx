@@ -1,4 +1,4 @@
-import { Play, Square, Loader } from 'lucide-react'
+import { Play, Loader } from 'lucide-react'
 import type { TranscreatedLine, ScriptLine } from '../../types/transcript'
 import './LineCard.css'
 

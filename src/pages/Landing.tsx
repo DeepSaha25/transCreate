@@ -6,6 +6,7 @@ import MultiOrbitSemiCircle from '../components/shared/MultiOrbitSemiCircle'
 import FeaturesCards from '../components/shared/FeaturesCards'
 import HowItWorksCards from '../components/shared/HowItWorksCards'
 import { Footer } from '../components/layout/Footer'
+import { OpenStudioButton } from '../components/shared/OpenStudioButton'
 import './Landing.css'
 
 const BROKEN_EXAMPLE = [
@@ -20,7 +21,6 @@ const GOOD_EXAMPLE = [
   { time: '00:00:21,500 → 00:00:24,000', text: '"Come on, straight talk — no fluff!" [confrontational]', note: 'bakwaas → fluff (register preserved)' },
 ]
 
-const TECH = ['IBM Granite 3.3', 'LangChain.js', 'Hugging Face', 'React', 'TypeScript']
 
 const TARGET_USERS = [
   {
@@ -88,8 +88,8 @@ export default function Landing() {
             </p>
 
             <div className="hero__ctas">
-              <Link to="/studio" className="btn btn-primary btn-lg" id="hero-cta-primary">
-                Open Studio — free
+              <Link to="/studio" id="hero-cta-primary" style={{ textDecoration: 'none' }}>
+                <OpenStudioButton text="Open Studio — free" />
               </Link>
               <a href="#how-it-works" className="btn btn-ghost btn-lg" id="hero-cta-secondary">
                 How it works

@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { 
-  Brain, Link, Smile, Atom, FileCode, Zap, 
-  BarChart, Activity, ShieldCheck, Route, 
-  Server, Paintbrush, Wand2, Database,
-  Cpu, Layers, Globe, Code, Box, Smartphone
-} from "lucide-react";
+import { useState, useEffect } from "react";
 import "./MultiOrbitSemiCircle.css";
 
 const ICONS = [

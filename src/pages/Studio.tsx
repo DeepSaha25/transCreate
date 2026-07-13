@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
-import { Download, Play, Square, Upload, ChevronRight, Loader, Shield, RefreshCw } from 'lucide-react'
+import { Download, Square, Upload, ChevronRight, Loader, Shield, RefreshCw } from 'lucide-react'
 import Navbar, { type StudioTab } from '../components/shared/Navbar'
 import { CULTURES, type CultureKey, type ScriptLine, type TranscreatedLine, type CulturalRisk } from '../types/transcript'
 import { parseSrt, parseTxt } from '../utils/fileParser'

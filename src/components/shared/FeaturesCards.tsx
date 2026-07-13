@@ -47,9 +47,9 @@ const features: Feature[] = [
 
 const shaderConfigs = [
   { proportion:0.38, softness:0.9,  distortion:0.16, swirl:0.70, swirlIterations:10, shape:"checks" as const, shapeScale:0.09, colors:["hsl(38,92%,12%)","hsl(43,96%,28%)","hsl(48,100%,42%)","hsl(35,80%,20%)"] },
-  { proportion:0.42, softness:1.1,  distortion:0.20, swirl:0.85, swirlIterations:12, shape:"dots"   as const, shapeScale:0.11, colors:["hsl(35,80%,10%)","hsl(44,90%,25%)","hsl(50,100%,45%)","hsl(40,70%,18%)"] },
+  { proportion:0.42, softness:1.1,  distortion:0.20, swirl:0.85, swirlIterations:12, shape:"stripes" as const, shapeScale:0.11, colors:["hsl(35,80%,10%)","hsl(44,90%,25%)","hsl(50,100%,45%)","hsl(40,70%,18%)"] },
   { proportion:0.35, softness:0.95, distortion:0.18, swirl:0.80, swirlIterations:9,  shape:"checks" as const, shapeScale:0.10, colors:["hsl(42,88%,14%)","hsl(46,95%,32%)","hsl(52,100%,50%)","hsl(38,75%,22%)"] },
-  { proportion:0.44, softness:1.0,  distortion:0.22, swirl:0.75, swirlIterations:14, shape:"dots"   as const, shapeScale:0.12, colors:["hsl(36,85%,11%)","hsl(42,92%,26%)","hsl(49,98%,44%)","hsl(37,78%,19%)"] },
+  { proportion:0.44, softness:1.0,  distortion:0.22, swirl:0.75, swirlIterations:14, shape:"stripes" as const, shapeScale:0.12, colors:["hsl(36,85%,11%)","hsl(42,92%,26%)","hsl(49,98%,44%)","hsl(37,78%,19%)"] },
 ];
 
 export default function FeaturesCards() {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, Filler } from 'chart.js'
 import { Line, Doughnut, Bar } from 'react-chartjs-2'
-import type { TranscreatedLine, ScriptLine, CulturalRisk, EmotionTag } from '../../types/transcript'
+import type { TranscreatedLine, ScriptLine, CulturalRisk } from '../../types/transcript'
 import { DollarSign, TrendingUp, BarChart3, FileText } from 'lucide-react'
 import './AnalyticsView.css'
 
