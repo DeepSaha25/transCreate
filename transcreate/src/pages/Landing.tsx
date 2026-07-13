@@ -3,6 +3,9 @@ import { Clapperboard, Mic, Trophy } from 'lucide-react'
 import Navbar from '../components/shared/Navbar'
 import { GLSLHills } from '../components/shared/GLSLHills'
 import MultiOrbitSemiCircle from '../components/shared/MultiOrbitSemiCircle'
+import FeaturesCards from '../components/shared/FeaturesCards'
+import HowItWorksCards from '../components/shared/HowItWorksCards'
+import { Footer } from '../components/layout/Footer'
 import './Landing.css'
 
 const BROKEN_EXAMPLE = [
@@ -15,12 +18,6 @@ const GOOD_EXAMPLE = [
   { time: '00:00:12,000 → 00:00:14,500', text: '"Man, this shot is absolutely killer." [excited]', note: 'mast → killer (slang adapted to US casual)' },
   { time: '00:00:16,200 → 00:00:19,000', text: '"Bro, this is one hell of a hack!" [warm familiarity]', note: 'jugaad → hack (cultural equivalent: resourceful fix)' },
   { time: '00:00:21,500 → 00:00:24,000', text: '"Come on, straight talk — no fluff!" [confrontational]', note: 'bakwaas → fluff (register preserved)' },
-]
-
-const HOW_STEPS = [
-  { num: '01', title: 'Upload your script', body: 'Drop in any .srt, .vtt, or .txt subtitle file. TransCreate reads timestamps, speaker cues, and line breaks automatically.' },
-  { num: '02', title: 'Select cultures', body: 'Choose your source culture (where the script was written) and the target culture (your new audience). 20 cultures supported.' },
-  { num: '03', title: 'Download the result', body: 'Every line is culturally adapted with an emotion tag and pronunciation guide. Export as a ready-to-use .srt file.' },
 ]
 
 const TECH = ['IBM Granite 3.3', 'LangChain.js', 'Hugging Face', 'React', 'TypeScript']
@@ -43,8 +40,8 @@ const TARGET_USERS = [
     tagline: 'Actors deliver on the first take.',
     pain: 'Actors receive a translated script with no cultural context. They mispronounce, mismatch the emotion, and you do 12 retakes.',
     gains: ['Delivery hints on every line', 'Pronunciation guides included', 'Re-transcreate any line instantly', 'Risk flags before rehearsal'],
-    metric: '↓ Retakes',
-    metricLabel: 'with guided emotion context',
+    metric: '↓ 90%',
+    metricLabel: 'fewer retakes with guided emotion context',
   },
   {
     id: '03',
@@ -55,37 +52,6 @@ const TARGET_USERS = [
     gains: ['Side-by-side cultural comparison', 'Glossary for jury context', 'Emotional arc visualised', 'Works on any .srt submission'],
     metric: '20',
     metricLabel: 'source cultures, day one',
-  },
-]
-
-const PRODUCTIVITY_TIPS = [
-  {
-    step: '01',
-    title: 'Scan risk before you book the studio',
-    body: 'Risk Scan colour-codes every line red, amber, or green. Know what needs attention before the session starts.',
-    tag: 'Pre-production',
-    color: '#c2410c',
-  },
-  {
-    step: '02',
-    title: 'Compare cultures before you decide',
-    body: 'See the same line adapted for multiple audiences simultaneously. Pick the version that fits your deal.',
-    tag: 'Creative',
-    color: '#d97706',
-  },
-  {
-    step: '03',
-    title: 'Refine one line, not the whole script',
-    body: 'Type a hint ("more urgent") and Re-transcreate just that line. Five seconds, not five hours.',
-    tag: 'On-set',
-    color: '#16a34a',
-  },
-  {
-    step: '04',
-    title: 'Send the Glossary to post-production',
-    body: 'Export a Markdown glossary so sound editors understand every cultural adaptation and don\'t accidentally undo it.',
-    tag: 'Post-production',
-    color: '#0ea5e9',
   },
 ]
 
@@ -107,19 +73,18 @@ export default function Landing() {
 
         <div className="hero__stage hero__stage--split">
 
-          {/* ── LEFT: Copy ── */}
+          {/* ── LEFT ── */}
           <div className="hero__copy">
             <span className="hero__eyebrow">IBM Granite · Cultural AI</span>
 
             <h1 className="hero__headline">
-              Film scripts<br />
-              that feel<br />
-              <span className="gradient-text">native.</span>
+              Film<br />
+              scripts that<br />
+              feel <span className="gradient-text">native.</span>
             </h1>
 
             <p className="hero__sub">
-              Emotion-tagged. Culture-matched. Export-ready.<br />
-              Transcreation for indie filmmakers at $0.
+              Cultural transcreation.<br />Not translation.
             </p>
 
             <div className="hero__ctas">
@@ -141,39 +106,47 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* ── RIGHT: 3D Subtitle Card Stack ── */}
+          {/* ── RIGHT: Terminal card ── */}
           <div className="hero__visual" aria-hidden="true">
-            <div className="card-stage">
-
-              {/* floating film-reel ring */}
-              <div className="reel-ring" />
-              <div className="reel-ring reel-ring--2" />
-
-              {/* subtitle cards */}
-              <div className="sub-card sub-card--1">
-                <span className="sub-card__time">00:01:24,000</span>
-                <p className="sub-card__line">"Man, this shot is absolutely killer."</p>
-                <span className="sub-card__tag">excited · US casual</span>
+            <div className="tc-preview">
+              <div className="tc-preview__chrome">
+                <span className="tc-dot tc-dot--red" /><span className="tc-dot tc-dot--yellow" /><span className="tc-dot tc-dot--green" />
+                <span className="tc-preview__chrome-label">transcreate · live output</span>
+                <span className="tc-pulse" style={{ marginLeft: 'auto' }} />
               </div>
 
-              <div className="sub-card sub-card--2">
-                <span className="sub-card__time">00:01:24,000</span>
-                <p className="sub-card__line">"¡Dios mío, este plano es una pasada!"</p>
-                <span className="sub-card__tag">entusiasmado · ES Latino</span>
-              </div>
+              <div className="tc-preview__body">
+                <div className="tc-source-row">
+                  <span className="tc-lang">EN</span>
+                  <div className="tc-row__content">
+                    <p className="tc-source__text">"Man, this shot is absolutely killer."</p>
+                  </div>
+                </div>
 
-              <div className="sub-card sub-card--3">
-                <span className="sub-card__time">00:01:24,000</span>
-                <p className="sub-card__line">"यार, यह शॉट तो कमाल है!"</p>
-                <span className="sub-card__tag">उत्साहित · HI India</span>
+                <div className="tc-outputs">
+                  <div className="tc-row tc-row--1">
+                    <span className="tc-lang tc-lang--out">ES</span>
+                    <div className="tc-row__content">
+                      <p className="tc-row__text">"¡Dios mío, este plano es una pasada!"</p>
+                      <span className="tc-row__tag">entusiasmado · Latino</span>
+                    </div>
+                  </div>
+                  <div className="tc-row tc-row--2">
+                    <span className="tc-lang tc-lang--out">HI</span>
+                    <div className="tc-row__content">
+                      <p className="tc-row__text">"यार, यह शॉट तो कमाल है!"</p>
+                      <span className="tc-row__tag">उत्साहित · India</span>
+                    </div>
+                  </div>
+                  <div className="tc-row tc-row--3">
+                    <span className="tc-lang tc-lang--out">JA</span>
+                    <div className="tc-row__content">
+                      <p className="tc-row__text">"このショット、マジやばくない？"</p>
+                      <span className="tc-row__tag">興奮 · Japan</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              {/* centre badge */}
-              <div className="translate-badge">
-                <span className="translate-badge__icon">TC</span>
-                <span className="translate-badge__label">20 cultures</span>
-              </div>
-
             </div>
           </div>
 
@@ -197,7 +170,8 @@ export default function Landing() {
             {/* Bad example */}
             <div className="proof-card proof-card--bad">
               <div className="proof-card__header">
-                <span className="badge badge-muted">Google Translate (literal)</span>
+                <h3 className="proof-card__title">Google Translate</h3>
+                <span className="proof-card__subtitle">Literal Translation</span>
               </div>
               <div className="proof-lines">
                 {BROKEN_EXAMPLE.map((line, i) => (
@@ -212,8 +186,10 @@ export default function Landing() {
 
             {/* Good example */}
             <div className="proof-card proof-card--good">
+              <div className="proof-card__glow" />
               <div className="proof-card__header">
-                <span className="badge badge-amber">TransCreate — IBM Granite 3.3</span>
+                <h3 className="proof-card__title proof-card__title--gold">TransCreate AI</h3>
+                <span className="proof-card__subtitle">Powered by IBM Granite 3.3</span>
               </div>
               <div className="proof-lines">
                 {GOOD_EXAMPLE.map((line, i) => (
@@ -232,25 +208,12 @@ export default function Landing() {
 
       <div className="divider" />
 
+      <FeaturesCards />
+
+      <div className="divider" />
+
       {/* ── How it works ── */}
-      <section className="how-section" id="how-it-works">
-        <div className="container">
-          <span className="section-label">How it works</span>
-          <h2 className="how-section__headline">Three steps to global distribution</h2>
-          <div className="how-steps">
-            {HOW_STEPS.map(step => (
-              <div className="how-step" key={step.num}>
-                <span className="how-step__num">{step.num}</span>
-                <h3 className="how-step__title">{step.title}</h3>
-                <p className="how-step__body">{step.body}</p>
-              </div>
-            ))}
-          </div>
-          <div className="how-cta">
-            <Link to="/studio" className="btn btn-primary btn-lg" id="how-cta-btn">Start transcreating</Link>
-          </div>
-        </div>
-      </section>
+      <HowItWorksCards />
 
       <div className="divider" />
 
@@ -264,29 +227,39 @@ export default function Landing() {
           <div className="users-grid">
             {TARGET_USERS.map(user => (
               <div className="user-card" key={user.id}>
-                <div className="user-card__top">
-                  <div className="user-card__icon">{user.icon}</div>
-                  <div>
-                    <div className="user-card__id">{user.id}</div>
+                <div className="user-card__glow" />
+                
+                <div className="user-card__header">
+                  <div className="user-card__icon-wrapper">
+                    <span className="user-card__icon">{user.icon}</span>
+                  </div>
+                  <div className="user-card__header-text">
+                    <span className="user-card__id">{user.id}</span>
                     <h3 className="user-card__role">{user.role}</h3>
                     <p className="user-card__tagline">{user.tagline}</p>
                   </div>
                 </div>
 
-                <p className="user-card__pain">
-                  <span className="user-card__pain-label">The Problem →</span> {user.pain}
-                </p>
+                <div className="user-card__body">
+                  <div className="user-card__pain-section">
+                    <div className="user-card__pain-tag">Current state</div>
+                    <p className="user-card__pain">{user.pain}</p>
+                  </div>
 
-                <ul className="user-card__gains">
-                  {user.gains.map((g, i) => (
-                    <li key={i} className="user-card__gain">
-                      <span className="user-card__gain-dot" />
-                      {g}
-                    </li>
-                  ))}
-                </ul>
+                  <div className="user-card__gains-section">
+                    <div className="user-card__gains-tag">With TransCreate</div>
+                    <ul className="user-card__gains">
+                      {user.gains.map((g, i) => (
+                        <li key={i} className="user-card__gain">
+                          <svg className="user-card__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          {g}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
-                <div className="user-card__metric">
+                <div className="user-card__footer">
                   <span className="user-card__metric-value">{user.metric}</span>
                   <span className="user-card__metric-label">{user.metricLabel}</span>
                 </div>
@@ -296,42 +269,12 @@ export default function Landing() {
         </div>
       </section>
 
-      <div className="divider" />
-
-      {/* ── Productivity Tips ── */}
-      <section className="tips-section" id="productivity">
-        <div className="container">
-          <span className="section-label">Maximise your workflow</span>
-          <h2 className="tips-section__headline">Four ways to get 10× more from TransCreate</h2>
-
-          <div className="tips-grid">
-            {PRODUCTIVITY_TIPS.map(tip => (
-              <div className="tip-card" key={tip.step}>
-                <div className="tip-card__accent" style={{ background: tip.color }} />
-                <div className="tip-card__header">
-                  <span className="tip-card__tag" style={{ color: tip.color, borderColor: `${tip.color}55`, background: `${tip.color}14` }}>{tip.tag}</span>
-                  <span className="tip-card__step">{tip.step}</span>
-                </div>
-                <h3 className="tip-card__title">{tip.title}</h3>
-                <p className="tip-card__body">{tip.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="divider" />
 
       {/* ── Built With ── */}
       <MultiOrbitSemiCircle />
 
       {/* ── Footer ── */}
-      <footer className="footer">
-        <div className="container footer__inner">
-          <span className="footer__brand">TransCreate</span>
-          <span className="footer__meta">IBM July Challenge 2026 · Creative Industries</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
