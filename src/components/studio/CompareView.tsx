@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { Loader, Globe, Sparkles } from 'lucide-react'
+import { useState, useCallback, useRef } from 'react'
+import { Loader, Globe, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { ScriptLine, CultureKey, CompareResult } from '../../types/transcript'
 import { CULTURES } from '../../types/transcript'
 import { compareAcrossCultures } from '../../services/langchainService'
@@ -41,29 +41,20 @@ export default function CompareView({ originalLines, sourceCulture }: Props) {
     )
   }
 
-  return (
-    <div className="compare-view">
-      {/* Left: Line picker + Culture selector */}
-      <div className="compare-sidebar">
-        <div className="compare-sidebar__section">
-          <h3 className="compare-sidebar__heading">Select Line</h3>
-          <div className="compare-sidebar__lines">
-            {originalLines.map(line => (
-              <button
-                key={line.id}
-                className={`compare-line-btn ${selectedLine?.id === line.id ? 'compare-line-btn--active' : ''}`}
-                onClick={() => { setSelectedLine(line); setResults(new Map()) }}
-              >
-                <span className="compare-line-btn__index">{String(line.index).padStart(2, '0')}</span>
-                <span className="compare-line-btn__text">{line.text}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const scroll = (dir: 'left' | 'right') => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: dir === 'left' ? -300 : 300, behavior: 'smooth' })
+    }
+  }
 
-        <div className="compare-sidebar__section">
-          <h3 className="compare-sidebar__heading">Target Cultures</h3>
-          <div className="compare-sidebar__cultures">
+  return (
+    <div className="studio-editor">
+      <div className="studio-content compare-results">
+        <div className="compare-header-row">
+          <span className="compare-culture-label">Target Cultures:</span>
+          <button className="compare-scroll-btn" onClick={() => scroll('left')}><ChevronLeft size={18} /></button>
+          <div className="compare-cultures-selector" ref={scrollRef}>
             {CULTURES.filter(c => c.key !== sourceCulture).map(c => (
               <label key={c.key} className="compare-culture-chip">
                 <input
@@ -75,24 +66,35 @@ export default function CompareView({ originalLines, sourceCulture }: Props) {
               </label>
             ))}
           </div>
+          <button className="compare-scroll-btn" onClick={() => scroll('right')}><ChevronRight size={18} /></button>
         </div>
 
-        <button
-          className="btn btn-primary compare-sidebar__go"
-          onClick={handleCompare}
-          disabled={!selectedLine || targetCultures.length === 0 || isComparing}
-        >
-          {isComparing ? <Loader size={14} className="spin" /> : <Sparkles size={14} />}
-          {isComparing ? 'Comparing...' : 'Compare Cultures'}
-        </button>
-      </div>
-
-      {/* Right: Comparison grid */}
-      <div className="compare-results">
         {selectedLine && (
           <div className="compare-original">
-            <div className="compare-original__label">Original ({sourceCulture})</div>
-            <div className="compare-original__text">"{selectedLine.text}"</div>
+            <div className="compare-original__content">
+              <span className="compare-original__label">Original ({sourceCulture})</span>
+              <div className="compare-original__text">"{selectedLine.text}"</div>
+            </div>
+            
+            <div className="compare-original__actions">
+              <select
+                className="compare-line-select"
+                value={selectedLine.id}
+                onChange={e => {
+                  const line = originalLines.find(l => l.id === e.target.value)
+                  if (line) {
+                    setSelectedLine(line)
+                    setResults(new Map())
+                  }
+                }}
+              >
+                {originalLines.map(line => (
+                  <option key={line.id} value={line.id}>
+                    Line {String(line.index).padStart(2, '0')}: {line.text.length > 50 ? line.text.substring(0, 50) + '...' : line.text}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
 
@@ -132,6 +134,29 @@ export default function CompareView({ originalLines, sourceCulture }: Props) {
               </div>
             )
           })}
+        </div>
+      </div>
+
+      {/* Horizontal Bottom Bar matching Editor */}
+      <div className="studio-bottom-bar">
+        <div className="bottom-bar__left">
+          {/* Line selector moved to original text box */}
+        </div>
+
+        <div className="bottom-bar__center">
+          <button
+            className="bottom-bar__btn bottom-bar__btn--primary"
+            onClick={handleCompare}
+            disabled={!selectedLine || targetCultures.length === 0 || isComparing}
+            style={{ padding: '8px 24px', fontSize: 'var(--text-sm)' }}
+          >
+            {isComparing ? <Loader size={14} className="spin" /> : <Sparkles size={14} />}
+            {isComparing ? 'Comparing...' : 'Compare Cultures'}
+          </button>
+        </div>
+
+        <div className="bottom-bar__right">
+          {/* Empty right area to balance the bar */}
         </div>
       </div>
     </div>

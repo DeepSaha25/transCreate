@@ -58,85 +58,86 @@ export default function GlossaryView({ originalLines, sourceCulture }: Props) {
   }
 
   return (
-    <div className="glossary-view">
-      {/* Header */}
-      <div className="glossary-header">
-        <div className="glossary-header__left">
-          <BookOpen size={20} />
-          <div>
-            <h2 className="glossary-header__title">Cultural Glossary Generator</h2>
-            <p className="glossary-header__desc">
-              Auto-extract culturally specific terms from your script and see how each adapts across cultures.
-            </p>
+    <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="studio-content glossary-results" style={{ flex: 1 }}>
+        <div className="compare-header-row">
+          <span className="compare-culture-label">Adapt for:</span>
+          <div className="compare-cultures-selector">
+            {CULTURES.filter(c => c.key !== sourceCulture).map(c => (
+              <label key={c.key} className="compare-culture-chip">
+                <input
+                  type="checkbox"
+                  checked={selectedTargets.includes(c.key)}
+                  onChange={() => toggleTarget(c.key)}
+                />
+                <span className="compare-culture-chip__label">{c.label}</span>
+              </label>
+            ))}
           </div>
         </div>
-        <div className="glossary-header__actions">
+
+        {/* Entries */}
+        {entries.length === 0 && !isGenerating && (
+          <div className="glossary-empty">
+            <BookOpen size={36} />
+            <p>Click "Generate Glossary" below to extract culturally specific terms from your script.</p>
+          </div>
+        )}
+
+        {isGenerating && (
+          <div className="glossary-loading">
+            <Loader size={24} className="spin" />
+            <p>Analyzing your script for culturally specific terms...</p>
+          </div>
+        )}
+
+        <div className="glossary-entries">
+          {entries.map((entry, i) => (
+            <div key={i} className="glossary-entry">
+              <div className="glossary-entry__header">
+                <span className="glossary-entry__term">"{entry.originalTerm}"</span>
+                <span className="glossary-entry__meaning">{entry.meaning}</span>
+              </div>
+              <div className="glossary-entry__adaptations">
+                {entry.adaptations.map((a, j) => (
+                  <div key={j} className="glossary-adaptation">
+                    <span className="glossary-adaptation__culture">{a.culture}</span>
+                    <span className="glossary-adaptation__adapted">{a.adapted}</span>
+                    <span className="glossary-adaptation__explanation">{a.explanation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="studio-bottom-bar">
+        <div className="bottom-bar__left">
+          {/* Empty left area to balance the bar */}
+        </div>
+
+        <div className="bottom-bar__center">
           <button
-            className="btn btn-ghost btn-sm"
-            onClick={handleExport}
-            disabled={entries.length === 0}
-          >
-            <Download size={14} /> Export .MD
-          </button>
-          <button
-            className="btn btn-primary btn-sm"
+            className="bottom-bar__btn bottom-bar__btn--primary"
             onClick={handleGenerate}
             disabled={isGenerating || originalLines.length === 0}
+            style={{ padding: '8px 24px', fontSize: 'var(--text-sm)' }}
           >
             {isGenerating ? <Loader size={14} className="spin" /> : <Sparkles size={14} />}
             {isGenerating ? 'Generating...' : 'Generate Glossary'}
           </button>
         </div>
-      </div>
 
-      {/* Target culture selector */}
-      <div className="glossary-targets">
-        <span className="glossary-targets__label">Adapt for:</span>
-        {CULTURES.filter(c => c.key !== sourceCulture).map(c => (
-          <label key={c.key} className="glossary-target-chip">
-            <input
-              type="checkbox"
-              checked={selectedTargets.includes(c.key)}
-              onChange={() => toggleTarget(c.key)}
-            />
-            <span>{c.label}</span>
-          </label>
-        ))}
-      </div>
-
-      {/* Entries */}
-      {entries.length === 0 && !isGenerating && (
-        <div className="glossary-empty">
-          <BookOpen size={36} />
-          <p>Click "Generate Glossary" to extract culturally specific terms from your script.</p>
+        <div className="bottom-bar__right">
+          <button
+            className="bottom-bar__btn bottom-bar__btn--ghost"
+            onClick={handleExport}
+            disabled={entries.length === 0}
+          >
+            <Download size={13} /> Export .MD
+          </button>
         </div>
-      )}
-
-      {isGenerating && (
-        <div className="glossary-loading">
-          <Loader size={24} className="spin" />
-          <p>Analyzing your script for culturally specific terms...</p>
-        </div>
-      )}
-
-      <div className="glossary-entries">
-        {entries.map((entry, i) => (
-          <div key={i} className="glossary-entry">
-            <div className="glossary-entry__header">
-              <span className="glossary-entry__term">"{entry.originalTerm}"</span>
-              <span className="glossary-entry__meaning">{entry.meaning}</span>
-            </div>
-            <div className="glossary-entry__adaptations">
-              {entry.adaptations.map((a, j) => (
-                <div key={j} className="glossary-adaptation">
-                  <span className="glossary-adaptation__culture">{a.culture}</span>
-                  <span className="glossary-adaptation__adapted">{a.adapted}</span>
-                  <span className="glossary-adaptation__explanation">{a.explanation}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   )
