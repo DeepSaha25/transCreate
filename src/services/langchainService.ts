@@ -87,7 +87,7 @@ export async function transcreateLines(
   targetCulture: CultureKey,
   onLineComplete: (line: TranscreatedLine) => void
 ): Promise<void> {
-  const CONCURRENCY = 3 // process 3 lines at a time
+  const CONCURRENCY = 2 // 2 concurrent — avoids HF rate limits
 
   async function processLine(line: ScriptLine, i: number) {
     const context = lines
@@ -96,22 +96,32 @@ export async function transcreateLines(
       .join('\n') || '(start)'
 
     let parsed: z.infer<typeof outputParser.schema>
-    try {
-      const formattedPrompt = await transcreationPrompt.format({
-        source_culture: sourceCulture,
-        target_culture: targetCulture,
-        original_line: line.text,
-        context,
-      })
-      const raw = await callGranite(formattedPrompt, 25000)
-      let cleanRaw = raw.trim()
-      if (cleanRaw.startsWith('```')) {
-        cleanRaw = cleanRaw.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '')
+    
+    // Try once, retry once on failure with a delay
+    for (let attempt = 0; attempt <= 1; attempt++) {
+      try {
+        if (attempt > 0) await new Promise(r => setTimeout(r, 2000)) // wait 2s before retry
+        const formattedPrompt = await transcreationPrompt.format({
+          source_culture: sourceCulture,
+          target_culture: targetCulture,
+          original_line: line.text,
+          context,
+        })
+        const raw = await callGranite(formattedPrompt, 25000)
+        let cleanRaw = raw.trim()
+        if (cleanRaw.startsWith('```')) {
+          cleanRaw = cleanRaw.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '')
+        }
+        parsed = await outputParser.parse(cleanRaw)
+        break // success — exit retry loop
+      } catch (err) {
+        if (attempt === 1) {
+          // Both attempts failed — use mock with line-index offset to vary the result
+          console.error('HF API Error for line', line.index, '(after retry):', err)
+          parsed = getMockTranscreation(line.text + line.index, sourceCulture, targetCulture) as any
+        }
+        // else loop continues to retry
       }
-      parsed = await outputParser.parse(cleanRaw)
-    } catch (err) {
-      console.error('HF API Error for line', line.index, ':', err)
-      parsed = getMockTranscreation(line.text, sourceCulture, targetCulture) as any
     }
 
     onLineComplete({
@@ -120,11 +130,11 @@ export async function transcreateLines(
       startTime: line.startTime,
       endTime: line.endTime,
       originalText: line.text,
-      transcreatedText: parsed.transcreated_text,
-      emotionTag: parsed.emotion_tag as EmotionTag,
-      pronunciationHint: parsed.pronunciation_hint,
-      rationale: parsed.rationale,
-      confidence: parsed.confidence,
+      transcreatedText: parsed!.transcreated_text,
+      emotionTag: parsed!.emotion_tag as EmotionTag,
+      pronunciationHint: parsed!.pronunciation_hint,
+      rationale: parsed!.rationale,
+      confidence: parsed!.confidence,
       isLoading: false,
     })
   }
