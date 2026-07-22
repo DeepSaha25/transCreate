@@ -169,17 +169,20 @@ export default function AnalyticsView({ originalLines, transcreated, risks }: Pr
 
   if (completedLines.length === 0) {
     return (
-      <div className="analytics-empty">
-        <BarChart3 size={40} />
-        <h3>No data yet</h3>
-        <p>Transcreate your script in the Editor tab first, then come back here for insights.</p>
+      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="analytics-empty">
+          <BarChart3 size={40} />
+          <h3>No data yet</h3>
+          <p>Transcreate your script in the Editor tab first, then come back here for insights.</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="analytics-view">
-      {/* Stat Cards */}
+    <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="analytics-view">
+        {/* Stat Cards */}
       <div className="analytics-stats">
         <div className="stat-card">
           <div className="stat-card__icon"><FileText size={18} /></div>
@@ -251,6 +254,8 @@ export default function AnalyticsView({ originalLines, transcreated, risks }: Pr
           </div>
         )}
       </div>
+      </div>
     </div>
   )
 }
+
