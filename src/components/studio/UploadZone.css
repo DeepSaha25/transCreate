@@ -1,27 +1,26 @@
-.upload-zone-outer {
+.upload-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex: 1;
   gap: var(--sp-4);
-  padding: var(--sp-8);
+  width: 100%;
+  max-width: 440px;
+  padding: var(--sp-4);
 }
 
 .upload-zone {
   width: 100%;
-  max-width: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--sp-5);
-  padding: var(--sp-12) var(--sp-8);
+  gap: var(--sp-4);
+  padding: var(--sp-10) var(--sp-8);
   background: var(--bg-card);
   border: 1px dashed var(--border-strong);
   border-radius: var(--r-xl);
   cursor: pointer;
-  transition: border-color var(--t-base), background var(--t-base);
   text-align: center;
+  transition: border-color var(--t-base), background var(--t-base);
 }
 
 .upload-zone:hover,
@@ -31,27 +30,33 @@
   outline: none;
 }
 
-.upload-zone--dragging {
+.upload-zone--drag {
   border-color: var(--accent);
   background: var(--accent-dim);
 }
 
-.upload-zone__labels {
+.upload-zone__icon {
+  color: var(--text-faint);
+}
+
+.upload-zone__text {
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
 }
 
-.upload-zone__main {
-  font-size: var(--text-lg);
+.upload-zone__heading {
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--text-primary);
   font-family: var(--font-display);
+  margin: 0;
 }
 
 .upload-zone__sub {
   font-size: var(--text-sm);
   color: var(--text-muted);
+  margin: 0;
 }
 
 .upload-zone__formats {
@@ -60,12 +65,28 @@
   gap: var(--sp-2);
 }
 
-.upload-zone__note {
+.upload-format {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+}
+
+.upload-note {
   font-size: var(--text-xs);
   color: var(--text-faint);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  flex-wrap: wrap;
-  justify-content: center;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.upload-note code {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 10px;
 }

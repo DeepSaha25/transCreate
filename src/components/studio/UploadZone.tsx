@@ -12,9 +12,7 @@ export default function UploadZone({ onFileUpload }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
 
-  const handleFile = (file: File) => {
-    onFileUpload(file)
-  }
+  const handleFile = (file: File) => onFileUpload(file)
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault()
@@ -24,9 +22,9 @@ export default function UploadZone({ onFileUpload }: Props) {
   }
 
   return (
-    <div className="upload-zone-outer">
+    <div className="upload-wrap">
       <div
-        className={`upload-zone ${isDragging ? 'upload-zone--dragging' : ''}`}
+        className={`upload-zone ${isDragging ? 'upload-zone--drag' : ''}`}
         onClick={() => inputRef.current?.click()}
         onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
         onDragLeave={() => setIsDragging(false)}
@@ -45,20 +43,25 @@ export default function UploadZone({ onFileUpload }: Props) {
           style={{ display: 'none' }}
           aria-hidden="true"
         />
-        <Upload size={28} color="var(--text-faint)" strokeWidth={1.5} />
-        <div className="upload-zone__labels">
-          <span className="upload-zone__main">Drop your subtitle or script file here</span>
-          <span className="upload-zone__sub">Accepts {ACCEPTED.join(', ')} · click to browse</span>
+
+        <div className="upload-zone__icon">
+          <Upload size={22} strokeWidth={1.5} />
         </div>
+
+        <div className="upload-zone__text">
+          <p className="upload-zone__heading">Drop your file here</p>
+          <p className="upload-zone__sub">Supports {ACCEPTED.join(', ')} — or click to browse</p>
+        </div>
+
         <div className="upload-zone__formats">
           {ACCEPTED.map(f => (
-            <span key={f} className="badge badge-muted">{f}</span>
+            <span key={f} className="upload-format">{f}</span>
           ))}
         </div>
       </div>
 
-      <p className="upload-zone__note">
-        No file? Paste raw dialog text directly as a <span className="badge badge-muted">.txt</span> file — one line per subtitle.
+      <p className="upload-note">
+        No file? Paste raw dialog as a <code>.txt</code> — one line per subtitle.
       </p>
     </div>
   )
