@@ -22,26 +22,12 @@ const outputParser = StructuredOutputParser.fromZodSchema(
 )
 
 const transcreationPrompt = new PromptTemplate({
-  template: `You are a professional transcreation specialist. Your job is NOT literal translation.
-You translate the EMOTIONAL INTENT, cultural idioms, humor, and subtext of a script line
-so it resonates naturally with the target culture — like a native speaker wrote it.
+  template: `You are a transcreation specialist. Adapt the line for {target_culture} — replace idioms/slang/humor with culturally native equivalents. Do NOT translate literally. Match the speaking length.
 
-SOURCE CULTURE: {source_culture}
-TARGET CULTURE: {target_culture}
+SOURCE ({source_culture}): "{original_line}"
+CONTEXT: {context}
 
-ORIGINAL LINE:
-"{original_line}"
-
-SURROUNDING CONTEXT (previous lines for continuity):
-{context}
-
-INSTRUCTIONS:
-- If the source contains slang, idioms, humor, or pop-culture references, replace them with the nearest culturally equivalent expression in the target culture.
-- Do NOT do word-for-word translation.
-- The emotion and intent must feel native to a {target_culture} audience.
-- Keep the transcreated text at roughly the same speaking length as the original.
-- IMPORTANT: Output ONLY raw, valid JSON. Do not include markdown codeblocks or any conversational text.
-
+Output ONLY raw valid JSON (no markdown, no prose):
 {format_instructions}`,
   inputVariables: ['source_culture', 'target_culture', 'original_line', 'context'],
   partialVariables: {
@@ -71,7 +57,7 @@ async function callGranite(prompt: string, timeoutMs = 15000): Promise<string> {
       body: JSON.stringify({
         model: HF_MODEL,
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 600,
+        max_tokens: 400,
         temperature: 0.7,
       }),
       signal: controller.signal
@@ -101,73 +87,52 @@ export async function transcreateLines(
   targetCulture: CultureKey,
   onLineComplete: (line: TranscreatedLine) => void
 ): Promise<void> {
-  // Process sequentially to avoid Hugging Face rate limits and connection hangs
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
+  const CONCURRENCY = 3 // process 3 lines at a time
+
+  async function processLine(line: ScriptLine, i: number) {
     const context = lines
       .slice(Math.max(0, i - 2), i)
       .map(l => l.text)
-      .join('\n') || '(start of script)'
+      .join('\n') || '(start)'
 
+    let parsed: z.infer<typeof outputParser.schema>
     try {
-      let parsed: z.infer<typeof outputParser.schema>
-
-      try {
-        const formattedPrompt = await transcreationPrompt.format({
-          source_culture: sourceCulture,
-          target_culture: targetCulture,
-          original_line: line.text,
-          context,
-        })
-
-        const raw = await callGranite(formattedPrompt, 20000) // 20s timeout
-        
-        let cleanRaw = raw.trim()
-        if (cleanRaw.startsWith('```json')) {
-          cleanRaw = cleanRaw.replace(/^```json\s*/, '').replace(/\s*```$/, '')
-        } else if (cleanRaw.startsWith('```')) {
-          cleanRaw = cleanRaw.replace(/^```\s*/, '').replace(/\s*```$/, '')
-        }
-        
-        parsed = await outputParser.parse(cleanRaw)
-      } catch (err) {
-        console.error('Hugging Face API Error for line', line.index, ':', err)
-        parsed = getMockTranscreation(line.text, sourceCulture, targetCulture) as any
+      const formattedPrompt = await transcreationPrompt.format({
+        source_culture: sourceCulture,
+        target_culture: targetCulture,
+        original_line: line.text,
+        context,
+      })
+      const raw = await callGranite(formattedPrompt, 25000)
+      let cleanRaw = raw.trim()
+      if (cleanRaw.startsWith('```')) {
+        cleanRaw = cleanRaw.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '')
       }
-
-      onLineComplete({
-        id: line.id,
-        index: line.index,
-        startTime: line.startTime,
-        endTime: line.endTime,
-        originalText: line.text,
-        transcreatedText: parsed.transcreated_text,
-        emotionTag: parsed.emotion_tag as EmotionTag,
-        pronunciationHint: parsed.pronunciation_hint,
-        rationale: parsed.rationale,
-        confidence: parsed.confidence,
-        isLoading: false,
-      })
-
-    } catch {
-      const fallback = getMockTranscreation(line.text, sourceCulture, targetCulture)
-      onLineComplete({
-        id: line.id,
-        index: line.index,
-        startTime: line.startTime,
-        endTime: line.endTime,
-        originalText: line.text,
-        transcreatedText: fallback.transcreated_text,
-        emotionTag: fallback.emotion_tag as EmotionTag,
-        pronunciationHint: fallback.pronunciation_hint,
-        rationale: fallback.rationale,
-        confidence: fallback.confidence,
-        isLoading: false,
-      })
+      parsed = await outputParser.parse(cleanRaw)
+    } catch (err) {
+      console.error('HF API Error for line', line.index, ':', err)
+      parsed = getMockTranscreation(line.text, sourceCulture, targetCulture) as any
     }
 
-    // Small yield between requests to let the API breathe
-    await new Promise(r => setTimeout(r, 400))
+    onLineComplete({
+      id: line.id,
+      index: line.index,
+      startTime: line.startTime,
+      endTime: line.endTime,
+      originalText: line.text,
+      transcreatedText: parsed.transcreated_text,
+      emotionTag: parsed.emotion_tag as EmotionTag,
+      pronunciationHint: parsed.pronunciation_hint,
+      rationale: parsed.rationale,
+      confidence: parsed.confidence,
+      isLoading: false,
+    })
+  }
+
+  // Process in parallel batches of CONCURRENCY
+  for (let i = 0; i < lines.length; i += CONCURRENCY) {
+    const batch = lines.slice(i, i + CONCURRENCY)
+    await Promise.all(batch.map((line, j) => processLine(line, i + j)))
   }
 }
 
