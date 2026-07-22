@@ -129,11 +129,19 @@ const FALLBACK: MockResult = {
 }
 
 export function getMockTranscreation(
-  _originalText: string,
+  originalText: string,
   _sourceCulture: CultureKey,
   targetCulture: CultureKey
 ): MockResult {
   const pool = MOCK_POOLS[targetCulture]
   if (!pool || pool.length === 0) return FALLBACK
-  return pool[Math.floor(Math.random() * pool.length)]
+  
+  // Deterministic selection based on original text
+  let hash = 0
+  for (let i = 0; i < originalText.length; i++) {
+    hash = originalText.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const index = Math.abs(hash) % pool.length
+  
+  return pool[index]
 }

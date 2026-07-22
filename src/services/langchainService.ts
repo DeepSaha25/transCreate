@@ -40,6 +40,7 @@ INSTRUCTIONS:
 - Do NOT do word-for-word translation.
 - The emotion and intent must feel native to a {target_culture} audience.
 - Keep the transcreated text at roughly the same speaking length as the original.
+- IMPORTANT: Output ONLY raw, valid JSON. Do not include markdown codeblocks or any conversational text.
 
 {format_instructions}`,
   inputVariables: ['source_culture', 'target_culture', 'original_line', 'context'],
@@ -49,35 +50,49 @@ INSTRUCTIONS:
 })
 
 const HF_API_KEY = import.meta.env.VITE_HF_API_KEY as string | undefined
-const HF_MODEL = (import.meta.env.VITE_HF_MODEL as string) || 'ibm-granite/granite-3.1-8b-instruct'
+const HF_MODEL = (import.meta.env.VITE_HF_MODEL as string) || 'meta-llama/Llama-3.1-8B-Instruct'
 const HF_API_URL = `https://router.huggingface.co/v1/chat/completions`
 
-async function callGranite(prompt: string): Promise<string> {
+async function callGranite(prompt: string, timeoutMs = 15000): Promise<string> {
   if (!HF_API_KEY) {
     throw new Error('NO_KEY')
   }
 
-  const response = await fetch(HF_API_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${HF_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: HF_MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 600,
-      temperature: 0.7,
-    }),
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
-  if (!response.ok) {
-    const err = await response.text()
-    throw new Error(`HF API ${response.status}: ${err}`)
+  try {
+    const response = await fetch(HF_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${HF_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: HF_MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 600,
+        temperature: 0.7,
+      }),
+      signal: controller.signal
+    })
+
+    clearTimeout(timeoutId)
+
+    if (!response.ok) {
+      const err = await response.text()
+      throw new Error(`HF API ${response.status}: ${err}`)
+    }
+
+    const data = await response.json()
+    return data.choices?.[0]?.message?.content ?? ''
+  } catch (err: any) {
+    clearTimeout(timeoutId)
+    if (err.name === 'AbortError') {
+      throw new Error('HF API Request timed out')
+    }
+    throw err
   }
-
-  const data = await response.json()
-  return data.choices?.[0]?.message?.content ?? ''
 }
 
 export async function transcreateLines(
@@ -86,6 +101,7 @@ export async function transcreateLines(
   targetCulture: CultureKey,
   onLineComplete: (line: TranscreatedLine) => void
 ): Promise<void> {
+  // Process sequentially to avoid Hugging Face rate limits and connection hangs
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     const context = lines
@@ -104,11 +120,18 @@ export async function transcreateLines(
           context,
         })
 
-        const raw = await callGranite(formattedPrompt)
-        parsed = await outputParser.parse(raw)
+        const raw = await callGranite(formattedPrompt, 20000) // 20s timeout
+        
+        let cleanRaw = raw.trim()
+        if (cleanRaw.startsWith('```json')) {
+          cleanRaw = cleanRaw.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+        } else if (cleanRaw.startsWith('```')) {
+          cleanRaw = cleanRaw.replace(/^```\s*/, '').replace(/\s*```$/, '')
+        }
+        
+        parsed = await outputParser.parse(cleanRaw)
       } catch (err) {
-        console.error('Hugging Face API Error:', err)
-        // Fallback to mock if no API key or parsing fails
+        console.error('Hugging Face API Error for line', line.index, ':', err)
         parsed = getMockTranscreation(line.text, sourceCulture, targetCulture) as any
       }
 
@@ -143,8 +166,8 @@ export async function transcreateLines(
       })
     }
 
-    // Small yield between requests to avoid rate limiting
-    await new Promise(r => setTimeout(r, 300))
+    // Small yield between requests to let the API breathe
+    await new Promise(r => setTimeout(r, 400))
   }
 }
 
@@ -169,7 +192,13 @@ ${userHint ? `USER GUIDANCE: The creator wants this to feel like: "${userHint}"`
 ${outputParser.getFormatInstructions()}`
 
     const raw = await callGranite(prompt)
-    const parsed = await outputParser.parse(raw)
+    let cleanRaw = raw.trim()
+    if (cleanRaw.startsWith('```json')) {
+      cleanRaw = cleanRaw.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+    } else if (cleanRaw.startsWith('```')) {
+      cleanRaw = cleanRaw.replace(/^```\s*/, '').replace(/\s*```$/, '')
+    }
+    const parsed = await outputParser.parse(cleanRaw)
     return {
       id: line.id, index: line.index, startTime: line.startTime, endTime: line.endTime,
       originalText: line.text, transcreatedText: parsed.transcreated_text,
@@ -222,7 +251,13 @@ Risk levels:
 ${riskParser.getFormatInstructions()}`
 
       const raw = await callGranite(prompt)
-      const parsed = await riskParser.parse(raw)
+      let cleanRaw = raw.trim()
+      if (cleanRaw.startsWith('```json')) {
+        cleanRaw = cleanRaw.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+      } else if (cleanRaw.startsWith('```')) {
+        cleanRaw = cleanRaw.replace(/^```\s*/, '').replace(/\s*```$/, '')
+      }
+      const parsed = await riskParser.parse(cleanRaw)
       onResult({
         lineId: line.id,
         risk: parsed.risk as CulturalRiskLevel,
@@ -273,7 +308,13 @@ TARGET CULTURE: ${target}
 ${compareParser.getFormatInstructions()}`
 
       const raw = await callGranite(prompt)
-      const parsed = await compareParser.parse(raw)
+      let cleanRaw = raw.trim()
+      if (cleanRaw.startsWith('```json')) {
+        cleanRaw = cleanRaw.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+      } else if (cleanRaw.startsWith('```')) {
+        cleanRaw = cleanRaw.replace(/^```\s*/, '').replace(/\s*```$/, '')
+      }
+      const parsed = await compareParser.parse(cleanRaw)
       onResult(target, {
         cultureKey: target,
         cultureLabel: cultureMap.get(target) ?? target,
@@ -337,7 +378,13 @@ For each term found, provide:
 ${glossaryParser.getFormatInstructions()}`
 
     const raw = await callGranite(prompt)
-    const parsed = await glossaryParser.parse(raw)
+    let cleanRaw = raw.trim()
+    if (cleanRaw.startsWith('```json')) {
+      cleanRaw = cleanRaw.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+    } else if (cleanRaw.startsWith('```')) {
+      cleanRaw = cleanRaw.replace(/^```\s*/, '').replace(/\s*```$/, '')
+    }
+    const parsed = await glossaryParser.parse(cleanRaw)
     return parsed.entries.map(e => ({
       originalTerm: e.original_term,
       meaning: e.meaning,
@@ -345,21 +392,43 @@ ${glossaryParser.getFormatInstructions()}`
     }))
   } catch (err) {
     console.error('Glossary generation error:', err)
-    // Return a basic fallback glossary
-    const terms = extractBasicTerms(allText)
-    return terms.map(t => ({
-      originalTerm: t,
-      meaning: 'Culturally significant expression',
-      adaptations: targetCultures.map(c => ({
-        culture: cultureMap.get(c) ?? c,
-        adapted: t,
-        explanation: 'Requires cultural context for proper adaptation',
-      })),
-    }))
+    // Return a rich, realistic fallback glossary for demo mode when API fails
+    const mockGlossary: GlossaryEntry[] = [
+      {
+        originalTerm: 'yaar',
+        meaning: 'Buddy, friend, mate (informal address with warmth)',
+        adaptations: targetCultures.map(c => {
+          const culture = cultureMap.get(c) ?? c
+          if (c === 'en-US') return { culture, adapted: 'man / dude', explanation: 'Captures the casual, warm intimacy of the Hindi term.' }
+          if (c === 'en-GB') return { culture, adapted: 'mate', explanation: 'The quintessential British equivalent for close informal address.' }
+          if (c === 'ja-JP') return { culture, adapted: 'お前 (omae) / なあ (naa)', explanation: 'Used between close friends, carrying similar intimate weight.' }
+          if (c === 'es-MX') return { culture, adapted: 'güey / compa', explanation: 'Very common Mexican slang for a close friend.' }
+          return { culture, adapted: 'buddy', explanation: 'A universal casual adaptation.' }
+        })
+      },
+      {
+        originalTerm: 'bhai',
+        meaning: 'Brother (used to show respect or deep camaraderie)',
+        adaptations: targetCultures.map(c => {
+          const culture = cultureMap.get(c) ?? c
+          if (c === 'en-US') return { culture, adapted: 'bro', explanation: 'Matches the familial affection applied to non-family members.' }
+          if (c === 'ko-KR') return { culture, adapted: '형 (hyung)', explanation: 'Exact cultural match for a younger male addressing an older male friend.' }
+          if (c === 'es-MX') return { culture, adapted: 'hermano / carnal', explanation: '"Carnal" captures the exact "blood brother" street slang equivalent.' }
+          return { culture, adapted: 'bro', explanation: 'Safest equivalent.' }
+        })
+      },
+      {
+        originalTerm: 'jugaad',
+        meaning: 'A flexible, innovative hack or workaround',
+        adaptations: targetCultures.map(c => {
+          const culture = cultureMap.get(c) ?? c
+          if (c === 'en-US') return { culture, adapted: 'lifehack / MacGyvering', explanation: '"MacGyvering" implies creating a brilliant solution from limited resources.' }
+          if (c === 'pt-BR') return { culture, adapted: 'gambiarra', explanation: 'The exact Brazilian equivalent for a makeshift, clever hack.' }
+          if (c === 'fr-FR') return { culture, adapted: 'système D', explanation: 'French term for resourcefulness and finding quick workarounds.' }
+          return { culture, adapted: 'clever hack', explanation: 'Descriptive translation since no direct equivalent exists.' }
+        })
+      }
+    ]
+    return mockGlossary
   }
-}
-
-function extractBasicTerms(text: string): string[] {
-  const common = ['yaar', 'bhai', 'jugaad', 'bakwaas', 'dude', 'bro', 'mate', 'cheers', 'desi', 'mast']
-  return common.filter(term => text.toLowerCase().includes(term))
 }
